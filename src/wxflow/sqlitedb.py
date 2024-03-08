@@ -3,12 +3,14 @@ from typing import Any, List, Optional, Tuple
 
 __all__ = ["SQLiteDB"]
 
+
 class SQLiteDBError(Exception):
     """
     Base class for SQLiteDB exceptions.
     """
     OperationalError = sqlite3.OperationalError
     IntegrityError = sqlite3.IntegrityError
+
 
 class SQLiteDB:
     """
