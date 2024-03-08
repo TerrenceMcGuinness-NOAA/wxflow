@@ -17,6 +17,9 @@ class SQLiteDB:
 
     """
 
+    OperationalError = sqlite3.OperationalError
+    IntegrityError = sqlite3.IntegrityError
+
     def __init__(self, db_name: str) -> None:
         self.db_name = db_name
         self.connection: Optional[sqlite3.Connection] = None
