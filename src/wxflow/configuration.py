@@ -112,7 +112,7 @@ class Configuration:
         magic = f'--- ENVIRONMENT BEGIN {random.randint(0,64**5)} ---'
         runme += f'/bin/echo -n "{magic}" ; /usr/bin/env -0'
         with open('/dev/null', 'w') as null:
-            env = subprocess.Popen(runme, shell=True, stdin=null.fileno(),
+            env = subprocess.Popen(runme, shell=True, executable='/bin/bash' stdin=null.fileno(),
                                    stdout=subprocess.PIPE)
             (out, err) = env.communicate()
         out = out.decode()
