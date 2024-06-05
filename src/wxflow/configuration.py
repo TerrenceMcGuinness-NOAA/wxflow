@@ -100,7 +100,7 @@ class Configuration:
         default_env = cls._get_shell_env([])
         and_script_env = cls._get_shell_env(scripts)
         if config_dict is not None:  # only update the environment with the config dictionary if it is provided
-            default_env = {k: v for k, v in default_env.items() if k in config_dict}
+            default_env = {kk: vv for kk, vv in default_env.items() if kk in config_dict}
         vars_just_in_script = set(and_script_env) - set(default_env)
         union_env = dict(default_env)
         union_env.update(and_script_env)
