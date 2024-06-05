@@ -159,9 +159,7 @@ def test_find_config(tmp_path, create_configs):
 def test_parse_config1(tmp_path, create_configs):
     cfg = Configuration(tmp_path)
     f0 = cfg.parse_config('config.file0')
-    print(f0)
-    assert 1 == 2
-    #assert file0_dict == f0
+    assert file0_dict == f0
 
 
 def test_parse_config2(tmp_path, create_configs):
