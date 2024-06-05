@@ -81,8 +81,7 @@ class Configuration:
         if isinstance(files, (str, bytes)):
             files = [files]
         files = [self.find_config(file) for file in files]
-        config_dict = self._get_script_env(files)  # get the config dictionary from the config files
-        return cast_strdict_as_dtypedict(self._get_script_env(files, config_dict))
+        return cast_strdict_as_dtypedict(self._get_script_env(files))
 
     def print_config(self, files: Union[str, bytes, list]) -> None:
         """
@@ -96,12 +95,11 @@ class Configuration:
         pprint(config, width=4)
 
     @classmethod
-    def _get_script_env(cls, scripts: List, config_dict: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def _get_script_env(cls, scripts: List) -> Dict[str, Any]:
         default_env = cls._get_shell_env([])
         and_script_env = cls._get_shell_env(scripts)
-        if config_dict is not None:  # only update the environment with the config dictionary if it is provided
-            default_env = {k: v for k, v in default_env.items() if k in config_dict}
-        vars_just_in_script = set(and_script_env) - set(default_env)
+        diff_values_dict = {k: and_script_env[k] for k in default_env if k in and_script_env and default_env[k] != and_script_env[k]}
+        vars_just_in_script = set(set(and_script_env) - set(default_env)).union(set(diff_values_dict))
         union_env = dict(default_env)
         union_env.update(and_script_env)
         return dict([(v, union_env[v]) for v in vars_just_in_script])
