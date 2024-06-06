@@ -1,7 +1,6 @@
 import glob
 import os
 import random
-from typing import Optional
 import subprocess
 import shutil
 from pathlib import Path
