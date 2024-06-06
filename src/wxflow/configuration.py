@@ -100,7 +100,7 @@ class Configuration:
         and_script_env = cls._get_shell_env(scripts)
         keys_in_scripts = set()
         for script in scripts:
-            result = subprocess.run(['grep', '-o', '-E', '\\b(' + '|'.join(default_env.keys()) + ')\\b', script], stdout=subprocess.PIPE)
+            result = subprocess.run(['grep', '-o', '-P', '\\b(' + '|'.join(default_env.keys()) + ')(?==)', script], stdout=subprocess.PIPE)
             keys_in_scripts.update(result.stdout.decode().split())
         vars_just_in_script = set(and_script_env) - set(default_env) | keys_in_scripts
         union_env = dict(default_env)
