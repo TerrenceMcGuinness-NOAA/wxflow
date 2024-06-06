@@ -98,8 +98,11 @@ class Configuration:
     def _get_script_env(cls, scripts: List) -> Dict[str, Any]:
         default_env = cls._get_shell_env([])
         and_script_env = cls._get_shell_env(scripts)
-        diff_values_dict = {k: and_script_env[k] for k in default_env if k in and_script_env and default_env[k] != and_script_env[k]}
-        vars_just_in_script = set(set(and_script_env) - set(default_env)).union(set(diff_values_dict))
+        keys_in_scripts = set()
+        for script in scripts:
+            result = subprocess.run(['grep', '-o', '-E', '\\b(' + '|'.join(default_env.keys()) + ')\\b', script], stdout=subprocess.PIPE)
+            keys_in_scripts.update(result.stdout.decode().split())
+        vars_just_in_script = set(and_script_env) - set(default_env) | keys_in_scripts
         union_env = dict(default_env)
         union_env.update(and_script_env)
         return dict([(v, union_env[v]) for v in vars_just_in_script])
