@@ -1,5 +1,6 @@
 import glob
 import os
+import re
 import random
 import shutil
 import subprocess
@@ -98,8 +99,9 @@ class Configuration:
         default_env = cls._get_shell_env([])
         and_script_env = cls._get_shell_env(scripts)
         keys_in_scripts = set()
+        regex_pattern = 'export\\s+\\b(' + '|'.join(map(re.escape, default_env.keys())) + ')(?==)'
         for script in scripts:
-            result = subprocess.run(['grep', '-o', '-P', '\\b(' + '|'.join(default_env.keys()) + ')(?==)', script], stdout=subprocess.PIPE)
+            result = subprocess.run(['grep', '-o', '-P', regex_pattern, script], stdout=subprocess.PIPE)
             keys_in_scripts.update(result.stdout.decode().split())
         vars_just_in_script = set(and_script_env) - set(default_env) | keys_in_scripts
         union_env = dict(default_env)
