@@ -99,7 +99,8 @@ class Configuration:
         default_env = cls._get_shell_env([])
         and_script_env = cls._get_shell_env(scripts)
         keys_in_scripts = set()
-        regex_pattern = 'export\\s+\\b(' + '|'.join(map(re.escape, default_env.keys())) + ')(?==)'
+        #regex_pattern = 'export\\s+\\b(' + '|'.join(map(re.escape, default_env.keys())) + ')(?==)'
+        regex_pattern = '\\b(' + '|'.join(map(re.escape, default_env.keys())) + ')(?==)'
         for script in scripts:
             result = subprocess.run(['grep', '-o', '-P', regex_pattern, script], stdout=subprocess.PIPE)
             keys_in_scripts.update(result.stdout.decode().split())
