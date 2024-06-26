@@ -96,18 +96,14 @@ class Configuration:
 
     @classmethod
     def _get_script_env(cls, scripts: List) -> Dict[str, Any]:
+        varbles = dict()
         default_env = cls._get_shell_env([])
         and_script_env = cls._get_shell_env(scripts)
-        keys_in_scripts = set()
-        #regex_pattern = 'export\\s+\\b(' + '|'.join(map(re.escape, default_env.keys())) + ')(?==)'
-        regex_pattern = '\\b(' + '|'.join(map(re.escape, default_env.keys())) + ')(?==)'
-        for script in scripts:
-            result = subprocess.run(['grep', '-o', '-P', regex_pattern, script], stdout=subprocess.PIPE)
-            keys_in_scripts.update(result.stdout.decode().split())
-        vars_just_in_script = set(and_script_env) - set(default_env) | keys_in_scripts
-        union_env = dict(default_env)
-        union_env.update(and_script_env)
-        return dict([(v, union_env[v]) for v in vars_just_in_script])
+
+        for key, value in and_script_env.items():
+            if key not in default_env or default_env[key] != value:
+                varbles[key] = value
+        return varbles
 
     @staticmethod
     def _get_shell_env(scripts: List) -> Dict[str, Any]:
